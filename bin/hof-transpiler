@@ -17,14 +17,32 @@ var underscoreDeepExtend = require('underscore-deep-extend');
 _.mixin({deepExtend: underscoreDeepExtend(_)});
 var rimraf = require('rimraf');
 
-function parseFileSync(filePath) {
+const parseFileSync = (filePath) => {
   try {
     return JSON.parse(fs.readFileSync(filePath, 'utf8'));
   } catch (error) {
     throw new Error(error);
   }
-}
+};
 
+const directory = (root, dirStats, next, translationObject) => {
+  var newBasePath = path.resolve(root.replace('/src', ''), dirStats.name);
+
+  mkdirp(newBasePath, function (mkerr) {
+    if (mkerr) {
+      throw Error(mkerr);
+    }
+    translationObject[dirStats.name] = require('fs')
+      .createWriteStream(
+        path.resolve(root.replace('/src', ''),
+          dirStats.name,
+          'default.json'
+        )
+      );
+    translationObject[dirStats.name].write('{');
+    next();
+  });
+};
 
 _.each(sources, function walking (src) {
   var walker = walk.walk(src);
@@ -33,28 +51,7 @@ _.each(sources, function walking (src) {
 
   /* eslint func-names:0 max-nested-callbacks:0 */
   walker.on('directory', function (root, dirStats, next) {
-    var languagePath = path.resolve(root.replace('/src', ''), dirStats.name);
-
-    rimraf(languagePath, function (err) {
-      if (err) {
-        throw Error(err);
-      }
-
-      mkdirp(languagePath, function (mkerr) {
-        if (mkerr) {
-          throw Error(mkerr);
-        }
-        writeFileStream[dirStats.name] = require('fs')
-          .createWriteStream(
-            path.resolve(root.replace('/src', ''),
-              dirStats.name,
-              'default.json'
-            )
-          );
-        writeFileStream[dirStats.name].write('{');
-        next();
-      });
-    });
+    directory(root, dirStats, next, writeFileStream);
   });
 
   walker.on('file', function (root, fileStats, next) {
@@ -84,19 +81,22 @@ _.each(sources, function walking (src) {
       shared.forEach(function (sharedSource) {
         walk.walk(sharedSource).on('file', function (root, fileStats, next) {
           var lang = getLanguage(root);
-          var fileName = fileStats.name.replace('.json', '');
           var streamLang = getLanguage(path.parse(writerStream.path).dir);
-          var parsedStream = null;
-          var stringStream = '';
+          var fileName = fileStats.name.replace('.json', '');
+          let current;
+          let strung;
+          let combined;
 
+          sharedMap[streamLang] = sharedMap[streamLang] || {};
           sharedMap[lang] = sharedMap[lang] || {};
           sharedMap[lang][fileName] = parseFileSync(path.resolve(root, fileStats.name));
 
-          parsedStream = sharedMap[streamLang];
-          _.deepExtend(parsedStream, parseFileSync(writerStream.path));
-          stringStream = JSON.stringify(parsedStream, null, '\t');
+          current = sharedMap[streamLang];
 
-          fs.writeFileSync(writerStream.path, stringStream, 'utf8');
+          combined = Object.assign(current, parseFileSync(writerStream.path));
+          strung = JSON.stringify(combined, null, '\t');
+
+          fs.writeFileSync(writerStream.path, strung, 'utf8');
           next();
         });
       });
