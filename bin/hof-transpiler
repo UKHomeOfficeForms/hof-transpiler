@@ -13,9 +13,6 @@ var fs = require('fs');
 var walk = require('walk');
 var path = require('path');
 var _ = require('underscore');
-var underscoreDeepExtend = require('underscore-deep-extend');
-_.mixin({deepExtend: underscoreDeepExtend(_)});
-var rimraf = require('rimraf');
 
 const parseFileSync = (filePath) => {
   try {
