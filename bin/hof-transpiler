@@ -3,6 +3,8 @@
 'use strict';
 
 const parsed = require('../lib/parse-args')(process.argv.slice(2));
+const getLanguage = (langPath) => langPath.split('/').pop();
+
 let sources = parsed.sources;
 let shared = parsed.shared;
 
@@ -23,10 +25,6 @@ function parseFileSync(filePath) {
   }
 }
 
-function getLanguage(langPath) {
-  var parts = langPath.split('/');
-  return parts[parts.length - 1];
-}
 
 _.each(sources, function walking (src) {
   var walker = walk.walk(src);
