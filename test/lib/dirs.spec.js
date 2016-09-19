@@ -6,7 +6,7 @@ let nextStub;
 
 describe('dirs', () => {
   describe('#delete', () => {
-    beforeEach(() => {
+    before(() => {
       rimrafSpy = sinon.spy();
       nextStub = sinon.stub();
       dirs = proxyquire('../lib/dirs', {
