@@ -92,6 +92,7 @@ _.each(sources, function walking (src) {
           var stringStream = '';
 
           sharedMap[lang] = sharedMap[lang] || {};
+          sharedMap[streamLang] = sharedMap[streamLang] || {};
           sharedMap[lang][fileName] = parseFileSync(path.resolve(root, fileStats.name));
 
           parsedStream = sharedMap[streamLang];
