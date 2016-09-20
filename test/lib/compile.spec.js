@@ -32,15 +32,13 @@ describe('compile', () => {
         }, () => {
           // Allow time for files to be written, callback seems to be reliable
           // for write, but doesn't account for stat/read speed
-          setTimeout(() => {
-            ensrc = path.resolve(fixtures.replace('src', 'en'));
-            arsrc = path.resolve(fixtures.replace('src', 'ar'));
-            enDir = fs.readdirSync(ensrc);
-            arDir = fs.readdirSync(arsrc);
-            english = fs.readFileSync(ensrc + '/default.json', 'utf8');
-            arabic = fs.readFileSync(arsrc + '/default.json', 'utf8');
-            done();
-          }, 100);
+          ensrc = path.resolve(fixtures.replace('src', 'en'));
+          arsrc = path.resolve(fixtures.replace('src', 'ar'));
+          enDir = fs.readdirSync(ensrc);
+          arDir = fs.readdirSync(arsrc);
+          english = fs.readFileSync(ensrc + '/default.json', 'utf8');
+          arabic = fs.readFileSync(arsrc + '/default.json', 'utf8');
+          done();
         });
       });
 
