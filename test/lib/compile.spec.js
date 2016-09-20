@@ -12,7 +12,7 @@ let compile;
 describe('compile', () => {
   describe('without shared', () => {
     beforeEach(() => {
-      compile = require('../lib/compile');
+      compile = require('../../lib/compile');
     });
     it('exist', () => {
       compile.should.exist;
@@ -22,20 +22,26 @@ describe('compile', () => {
       let enDir;
       let english;
       let arabic;
-      let arsrc = path.resolve(fixtures.replace('src', 'ar'));
-      let ensrc = path.resolve(fixtures.replace('src', 'en'));
+      let arsrc;
+      let ensrc;
 
-      before((done) => {
+      before('compile, then read compiled files', (done) => {
         compile({
           sources: [fixtures],
           shared: []
         }, () => {
-          english = fs.readFileSync(ensrc + '/default.json', 'utf8');
-          arabic = fs.readFileSync(arsrc + '/default.json', 'utf8');
-          done();
+          // Allow time for files to be written, callback seems to be reliable
+          // for write, but doesn't account for stat/read speed
+          setTimeout(() => {
+            ensrc = path.resolve(fixtures.replace('src', 'en'));
+            arsrc = path.resolve(fixtures.replace('src', 'ar'));
+            enDir = fs.readdirSync(ensrc);
+            arDir = fs.readdirSync(arsrc);
+            english = fs.readFileSync(ensrc + '/default.json', 'utf8');
+            arabic = fs.readFileSync(arsrc + '/default.json', 'utf8');
+            done();
+          }, 100);
         });
-        arDir = fs.readdirSync(arsrc);
-        enDir = fs.readdirSync(ensrc);
       });
 
       it('creates new folders', () => {
