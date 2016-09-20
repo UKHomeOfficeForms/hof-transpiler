@@ -3,13 +3,17 @@
   "version": "0.1.0",
   "main": "./bin/hof-transpiler",
   "description": "Takes files from a src and creates a language dir and translate file based on multiple files parts",
-  "license": "GPLv2",
+  "license": "GPL-2.0",
   "author": "HomeOffice",
   "contributors": [
     "Ben Marvell <github@marvell-consulting.com> (http://www.marvell-consulting.com/)",
-    "Joseph Chapman <joe@creatify-limited.com> (http://www.creatify-limited.com/)"
+    "Joseph Chapman <joe@creatify-limited.com> (http://www.creatify-limited.com/)",
+    "Ralph Cowling <ralph@ralph-cowling.com> (http://www.ralph-cowling.com/)"
   ],
   "bin": "./bin/hof-transpiler",
+  "scripts": {
+    "test": "node_modules/.bin/mocha"
+  },
   "dependencies": {
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
