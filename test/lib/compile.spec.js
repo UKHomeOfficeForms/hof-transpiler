@@ -92,6 +92,35 @@ describe('compile', () => {
           });
         });
       });
+
+      describe('with shared document', () => {
+        before('compile, then read compiled files', (done) => {
+          compile({
+            sources: [fixtures],
+            shared: ['./test/fixtures/shared/src']
+          }, () => {
+            // Allow time for files to be written, callback seems to be reliable
+            // for write, but doesn't account for stat/read speed
+            ensrc = path.resolve(fixtures.replace('src', 'en'));
+            arsrc = path.resolve(fixtures.replace('src', 'ar'));
+            enDir = fs.readdirSync(ensrc);
+            arDir = fs.readdirSync(arsrc);
+            english = fs.readFileSync(ensrc + '/default.json', 'utf8');
+            arabic = fs.readFileSync(arsrc + '/default.json', 'utf8');
+            done();
+          });
+        });
+
+        it('merges objects', () => {
+          JSON.parse(english).errorlist.title.should.have.keys([
+            'single',
+            'multiple',
+            'triple'
+          ]);
+        });
+
+      });
+
     });
   });
 });
