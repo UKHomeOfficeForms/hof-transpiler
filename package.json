@@ -1,6 +1,6 @@
 {
   "name": "hof-transpiler",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "main": "./bin/hof-transpiler",
   "description": "Takes files from a src and creates a language dir and translate file based on multiple files parts",
   "license": "GPL-2.0",
