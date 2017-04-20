@@ -15,12 +15,10 @@
     "test": "node_modules/.bin/mocha"
   },
   "dependencies": {
-    "async": "^2.1.4",
     "lodash.merge": "^4.6.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
-    "rimraf": "^2.4.3",
-    "walk": "^2.3.9"
+    "rimraf": "^2.4.3"
   },
   "devDependencies": {
     "chai": "^3.5.0",

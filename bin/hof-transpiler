@@ -2,7 +2,4 @@
 
 'use strict';
 
-const parsed = require('../lib/parse-args')(process.argv.slice(2));
-const compile = require('../lib/compile');
-
-compile(parsed);
+const args = require('minimist')(process.argv.slice(2));
