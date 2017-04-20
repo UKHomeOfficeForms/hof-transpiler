@@ -7,13 +7,10 @@ const getdirs = (location) => fs.readdirSync(location).filter(
 );
 const fixtures = './test/fixtures/src';
 
-let compile;
+const compile = require('../../');
 
 describe('compile', () => {
   describe('without shared', () => {
-    beforeEach(() => {
-      compile = require('../../lib/compile');
-    });
     it('exist', () => {
       compile.should.exist;
     });
@@ -25,21 +22,19 @@ describe('compile', () => {
       let arsrc;
       let ensrc;
 
-      before('compile, then read compiled files', (done) => {
+      before('compile, then read compiled files', () => {
         compile({
           sources: [fixtures],
           shared: []
-        }, () => {
-          // Allow time for files to be written, callback seems to be reliable
-          // for write, but doesn't account for stat/read speed
-          ensrc = path.resolve(fixtures.replace('src', 'en'));
-          arsrc = path.resolve(fixtures.replace('src', 'ar'));
-          enDir = fs.readdirSync(ensrc);
-          arDir = fs.readdirSync(arsrc);
-          english = fs.readFileSync(ensrc + '/default.json', 'utf8');
-          arabic = fs.readFileSync(arsrc + '/default.json', 'utf8');
-          done();
         });
+        // Allow time for files to be written, callback seems to be reliable
+        // for write, but doesn't account for stat/read speed
+        ensrc = path.resolve(fixtures.replace('src', 'en'));
+        arsrc = path.resolve(fixtures.replace('src', 'ar'));
+        enDir = fs.readdirSync(ensrc);
+        arDir = fs.readdirSync(arsrc);
+        english = fs.readFileSync(ensrc + '/default.json', 'utf8');
+        arabic = fs.readFileSync(arsrc + '/default.json', 'utf8');
       });
 
       it('creates new folders', () => {
@@ -94,21 +89,19 @@ describe('compile', () => {
       });
 
       describe('with shared document', () => {
-        before('compile, then read compiled files', (done) => {
+        before('compile, then read compiled files', () => {
           compile({
             sources: [fixtures],
             shared: ['./test/fixtures/shared/src']
-          }, () => {
-            // Allow time for files to be written, callback seems to be reliable
-            // for write, but doesn't account for stat/read speed
-            ensrc = path.resolve(fixtures.replace('src', 'en'));
-            arsrc = path.resolve(fixtures.replace('src', 'ar'));
-            enDir = fs.readdirSync(ensrc);
-            arDir = fs.readdirSync(arsrc);
-            english = fs.readFileSync(ensrc + '/default.json', 'utf8');
-            arabic = fs.readFileSync(arsrc + '/default.json', 'utf8');
-            done();
           });
+          // Allow time for files to be written, callback seems to be reliable
+          // for write, but doesn't account for stat/read speed
+          ensrc = path.resolve(fixtures.replace('src', 'en'));
+          arsrc = path.resolve(fixtures.replace('src', 'ar'));
+          enDir = fs.readdirSync(ensrc);
+          arDir = fs.readdirSync(arsrc);
+          english = fs.readFileSync(ensrc + '/default.json', 'utf8');
+          arabic = fs.readFileSync(arsrc + '/default.json', 'utf8');
         });
 
         it('merges objects', () => {

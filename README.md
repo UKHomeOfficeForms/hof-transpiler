@@ -13,10 +13,6 @@ Home office forms transpiler is a tiny tool that can be used as part of a build 
 hof-transpiler [source dir|glob] {OPTIONS}
 
        --shared, -s  A path or glob to a directory of shared translations
-
-  --writeShared, -w  Generate a built JSON file of the the shared
-                     translations. Default setting is false.
-
 ```
 
 ## Example
@@ -86,7 +82,7 @@ buttons.json containing:
 
 If you then run:
 ```bash
-hof-transpiler translations/src -w --shared shared-translations/src
+hof-transpiler translations/src --shared shared-translations/src
 ```
 
 Then transpiled translations should appear in translations/en/default.json as follows:
@@ -106,7 +102,7 @@ Note how a deep merge is performed between the json, with key value pairs from "
 
 ## Multiple shared sources
 
-hof-transpiler supports multiple shared sources, extending them from right to left. This is useful if you have translations shared between applications, and additional shared translations between routes within an application.
+hof-transpiler supports multiple shared sources, extending them from left to right. This is useful if you have translations shared between applications, and additional shared translations between routes within an application.
 
 If you have the following sources:
 
@@ -137,34 +133,7 @@ my-application/translations/src/en/buttons.json
 
 If you then run:
 ```bash
-hof-transpiler my-application/translations/src -w --shared common/translations/src --shared node_modules/hof-template-partials/translations/src
-```
-
-You will end up with the following compiled files:
-
-node_modules/hof-template-partials/translations/en/default.json
-```json
-{
-  "buttons": {
-    "continue": "Continue",
-    "skip": "Skip",
-    "submit": "Submit",
-    "abort": "Abort"
-  }
-}
-```
-
-common/translations/en/default.json
-```json
-{
-  "buttons": {
-    "continue": "Continue",
-    "skip": "Skip this step",
-    "submit": "Submit",
-    "abort": "Abort",
-    "cancel": "Cancel"
-  }
-}
+hof-transpiler my-application/translations/src --shared node_modules/hof-template-partials/translations/src --shared common/translations/src
 ```
 
 my-application/translations/en/default.json
