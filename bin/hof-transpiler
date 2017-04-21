@@ -8,8 +8,6 @@ const compile = require('../lib/compile');
 const options = {};
 
 options.sources = args._;
-
-options.shared = args.shared || [];
-options.shared = args.shared.concat(args.s || []);
+options.shared = args.shared || args.s || [];
 
 compile(options);
